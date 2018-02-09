@@ -219,7 +219,9 @@ function initAdjMatrix(nbVertices,tab) {
   var table = document.getElementById('adj_m_table');
   table.innerHTML = " ";
   var parent = document.getElementById('adj_m');
-  parent.removeChild(document.getElementById('info_m'));
+  if (document.getElementById('info_m')!=null) {
+    parent.removeChild(document.getElementById('info_m'));
+  }
   var head = document.createElement('thead');
   var tr = document.createElement('tr');
   var th_empty = document.createElement('th');
@@ -280,7 +282,9 @@ function initAdjList(nbVertices,tab) {
   var table = document.getElementById('adj_l_table');
   table.innerHTML = " ";
   var parent = document.getElementById('adj_l');
-  parent.removeChild(document.getElementById('info_l'));
+  if (document.getElementById('info_l')!=null) {
+    parent.removeChild(document.getElementById('info_l'));
+  }
   var head = document.createElement('thead');
   var tr = document.createElement('tr');
   /*
