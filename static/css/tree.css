@@ -1,0 +1,33 @@
+#svg_graph {
+
+  height: 50vh;
+  width: 50vw;
+}
+
+#svg_container {
+  float:left;
+  height: 50vh;
+  width: 50vw;
+  border: 1px solid black;
+}
+
+#form_container {
+  float:left;
+  margin-left: 5vw;
+  width: 45vw;
+  height: 50vh;
+}
+
+#comment {
+  width:10vw;
+}
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
