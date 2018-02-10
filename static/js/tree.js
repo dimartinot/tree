@@ -10,7 +10,9 @@ function Edge(start,end) {
     this.start=start;
     this.end=end;
   } else {
-    alert("Edge initialization Error : Parameters are not of the same type");
+    document.getElementById('success').style.visibility = "visible";
+    document.getElementById('success').setAttribute("class","alert alert-danger");
+    document.getElementById('success').innerHTML = "<strong>Failure !</strong> Graph not correctly initialized. Edge initialization Error : Parameters are not of the same type";
     throw "Edge initialization Error : Parameters are not of the same type";
     exit(-1);
   }
@@ -30,7 +32,9 @@ function Graph(nbVertices,tab) {
   */
   this.vertices = [];//list of all vertices
   if (typeof this != "object") {
-    alert("Graph initialization Error : Not an object");
+    document.getElementById('success').style.visibility = "visible";
+    document.getElementById('success').setAttribute("class","alert alert-danger");
+    document.getElementById('success').innerHTML = "<strong>Failure !</strong> Graph not correctly initialized. Graph initialization Error : Not an object";
     throw "Graph initialization Error : Not an object";
     exit(-1);
   }
@@ -39,7 +43,9 @@ function Graph(nbVertices,tab) {
       For each element in tab, we verify if it is an edge
     */
     if (tab[i].start == undefined || tab[i].end == undefined){
-      alert("Graph initialization Error : tab incorrectly initialized");
+      document.getElementById('success').style.visibility = "visible";
+      document.getElementById('success').setAttribute("class","alert alert-danger");
+      document.getElementById('success').innerHTML = "<strong>Failure !</strong> Graph not correctly initialized. Graph initialization Error : tab incorrectly initialized";
       throw "Graph initialization Error : tab incorrectly initialized";
       exit(-1);
     }
@@ -66,8 +72,10 @@ function Graph(nbVertices,tab) {
   /*
     If some vertices do not have any edges (equivalent to "the amount of edges is lower than the amount of vertices"), the entry is considered to be incorrect
   */
-  if (count<nbVertices) {
-    alert("Graph initialization Error : Missing edges");
+  if (count!=nbVertices) {
+    document.getElementById('success').style.visibility = "visible";
+    document.getElementById('success').setAttribute("class","alert alert-danger");
+    document.getElementById('success').innerHTML = "<strong>Failure !</strong> Graph not correctly initialized. Graph initialization Error : Missing edges";
     throw "Graph initialization Error : Missing edges";
     exit(-1);
   }
@@ -185,16 +193,132 @@ function initGraph(nbVertices,tab) {
     d.fx = null;
     d.fy = null;
   }
-
 }
 
 function demo() {
   var tab = [];
-  for (i=0;i<5;i++) {
-    tab.push(new Edge(i,4-i));
+  for (i=0;i<3;i++) {
+    tab.push(new Edge(i+1,i));
   }
-  initGraph(5,tab);
+  for (i=0;i<3;i++) {
+    tab.push(new Edge(2*i,3*i));
+  }
+  console.log(tab);
+  initGraph(6,tab);
 }
+
+
+/**
+* Initialize the Adjacent-Matrix on the HTML
+* @class initAdjMatrix
+* @param {nbVertices} some integer
+* @param {tab} some Array of Edges
+*/
+function initAdjMatrix(nbVertices,tab) {
+  var g = new Graph(nbVertices,tab);
+  var table = document.getElementById('adj_m_table');
+  table.innerHTML = " ";
+  var parent = document.getElementById('adj_m');
+  if (document.getElementById('info_m')!=null) {
+    parent.removeChild(document.getElementById('info_m'));
+  }
+  var head = document.createElement('thead');
+  var tr = document.createElement('tr');
+  var th_empty = document.createElement('th');
+  tr.appendChild(th_empty);
+  /*
+    Head definition
+  */
+  for (var i = 0; i < g.vertices.length; i++ ) {
+    th = document.createElement('th');
+    th.innerHTML = g.vertices[i];
+    console.log(g.vertices[i]);
+    tr.appendChild(th);
+    head.appendChild(tr);
+    table.appendChild(head);
+  }
+  /*
+    Body definition
+  */
+  var body = document.createElement("tbody");
+  for (var i = 0; i < g.vertices.length; i++ ) {
+    var tr = document.createElement('tr');
+    var td_empty = document.createElement('td');
+    td_empty.innerHTML = '<b>'+g.vertices[i]+'</b>'
+    tr.appendChild(td_empty);
+    for (var j = 0; j < g.vertices.length; j++) {
+      td = document.createElement('td');
+        if (g[g.vertices[i]].includes(g.vertices[j])) {
+          td.innerHTML = 1;
+        } else {
+          td.innerHTML = 0;
+        }
+        tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+  table.appendChild(body);
+}
+
+function getMaxLength(g) {
+  var max = 0;
+  for (var i = 0; i < g.vertices.length; i++) {
+    if (max<g[g.vertices[i]].length) {
+      max = g[g.vertices[i]].length;
+    }
+  }
+  return max;
+}
+
+
+/**
+* Initialize the Adjacent-List on the HTML
+* @class initAdjMatrix
+* @param {nbVertices} some integer
+* @param {tab} some Array of Edges
+*/
+function initAdjList(nbVertices,tab) {
+  var g = new Graph(nbVertices,tab);
+  var table = document.getElementById('adj_l_table');
+  table.innerHTML = " ";
+  var parent = document.getElementById('adj_l');
+  if (document.getElementById('info_l')!=null) {
+    parent.removeChild(document.getElementById('info_l'));
+  }
+  var head = document.createElement('thead');
+  var tr = document.createElement('tr');
+  /*
+    Head definition
+  */
+  for (var i = 0; i < g.vertices.length; i++ ) {
+    th = document.createElement('th');
+    th.innerHTML = g.vertices[i];
+    console.log(g.vertices[i]);
+    tr.appendChild(th);
+    head.appendChild(tr);
+    table.appendChild(head);
+  }
+  var max = getMaxLength(g);
+  /*
+    Body definition
+  */
+  var body = document.createElement("tbody");
+  for (var i = 0; i < max; i++ ) {
+    var tr = document.createElement('tr');
+    for (var j = 0; j < g.vertices.length; j++) {
+      td = document.createElement('td');
+        if (g[g.vertices[j]].length<=i) {
+          td.innerHTML = " ";
+        } else {
+          td.innerHTML = g[g.vertices[j]][i];
+        }
+        tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+  table.appendChild(body);
+}
+
 
 function changeData() {
   var data = document.getElementById("data").value;
@@ -211,13 +335,60 @@ function changeData() {
   }
   for (var i = 0; i < data.length; i++) {
     str = data[i].split('-');
-    console.log(data[i]);
     tab.push(new Edge(str[0],str[1]));
   }
   $("#svg_graph").empty();
   initGraph(nbVertices,tab);
+  initAdjMatrix(nbVertices,tab);
+  initAdjList(nbVertices,tab);
+  document.getElementById('success').style.visibility = "visible";
+  document.getElementById('success').setAttribute("class","alert alert-success");
+  document.getElementById('success').innerHTML= "<strong>Success !</strong> Graph correctly initialized.";
+
 }
 
-/**
-  MAIN
-*/
+function random_min_max(min,max) {
+  return Math.floor(Math.random() * max) + min;
+}
+
+function changeDataRdm() {
+  var nbVertices = parseInt(document.getElementById("vertices_rdm").value);
+  var nbEdges = parseInt(document.getElementById("edges_rdm").value);
+  var tab=[];
+  var tab_x=[];
+  for (var i = 0; i < nbVertices; i++) {
+    do {
+      x2=random_min_max(0,nbVertices);
+      console.log(x2);
+      console.log('---');
+      var edg = new Edge(i,x2);
+    } while (i==x2);
+    tab.push(edg);
+    if (tab_x.includes(x2)==false) {
+      tab_x.push(x2);
+      console.log(tab_x);
+    }
+  }
+  for (var i = nbVertices; i < nbEdges; i++) {
+    do {
+      x1=random_min_max(0,nbVertices);
+      x2=random_min_max(0,nbVertices);
+    } while (x1==x2);
+    tab.push(new Edge(x1,x2));
+  }
+  $("#svg_graph").empty();
+  initGraph(nbVertices,tab);
+  initAdjMatrix(nbVertices,tab);
+  initAdjList(nbVertices,tab);
+  document.getElementById('success').style.visibility = "visible";
+  document.getElementById('success').setAttribute("class","alert alert-success");
+  document.getElementById('success').innerHTML= "<strong>Success !</strong> Graph correctly initialized.";
+
+}
+
+
+tab = [0,1,2,3,4,5];
+x=0;
+while (tab.includes(x)==true) {
+  x=random_min_max(0,7);
+}
