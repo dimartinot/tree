@@ -21,6 +21,18 @@
   width:10vw;
 }
 
+#maze_svg, #maze_container {
+  float:left;
+}
+
+#maze_container {
+  margin-left: 5vw;
+  margin-top: 15vh;
+  height: 35vw;
+  width: 35vw;
+  border: 1px solid black;
+}
+
 .container {
   width: 80vw;
 }
@@ -28,6 +40,11 @@
 .links line {
   stroke: #999;
   stroke-opacity: 0.6;
+}
+
+.barrier {
+    stroke-width: 1;
+    stroke: black;
 }
 
 .nodes circle {
