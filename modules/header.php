@@ -17,7 +17,8 @@
       <ul class="nav navbar-nav">
         <li id="Home"><a href="./" class="list-item">Home</a></li>
         <li id="Graph"><a href="graph.php" class="list-item">Graph</a></li>
-        <li id="BinTree"><a href="bin.php" class="list-item">Binary Tree</a></li>
+        <li id="BinTree"><a href="bintree.php" class="list-item">Binary Tree</a></li>
+        <li id="Maze"><a href="maze.php" class="list-item">Maze</a></li>
       </ul>
     </div>
   </nav>
