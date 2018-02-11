@@ -113,25 +113,25 @@ function Graph(nbVertices,tab) {
 }
 
 /**
-* Initialize the graph appearence on the SVG html object, using D3.js
-* @class initGraph
+* Initialize the graph on the SVG html object, using D3.js
+* @function initGraph
 * @param {nvVertices} some integer
 * @param {tab} some Array of Edges
 */
-function initGraph(nbVertices,tab) {
+function initGraph(nbVertices,tab,id) {
 
   var g = new Graph(nbVertices,tab)
-  var svg = document.getElementById("svg_graph");
-  console.log(d3.select("svg"));
-
-  var svg = d3.select("svg"),
+  var svg = d3.select("#"+id),
       width = +svg.attr("width"),
       height = +svg.attr("height");
 
   var color = d3.scaleOrdinal(d3.schemeCategory20);
 
   var simulation = d3.forceSimulation()
-      .force("link", d3.forceLink().id(function(d) { return d.id; }))
+      .force("link", d3.forceLink()
+        .id(function(d) { return d.id; })
+        .distance(function() { return 1; })
+      )
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -203,22 +203,22 @@ function demo() {
   for (i=0;i<3;i++) {
     tab.push(new Edge(2*i,3*i));
   }
-  console.log(tab);
-  initGraph(6,tab);
+  initGraph(6,tab,"svg_graph");
 }
 
 
 /**
 * Initialize the Adjacent-Matrix on the HTML
-* @class initAdjMatrix
+* @function initAdjMatrix
 * @param {nbVertices} some integer
 * @param {tab} some Array of Edges
+* @param {id} some string : the name of the div where the <table> is positioned
 */
-function initAdjMatrix(nbVertices,tab) {
+function initAdjMatrix(nbVertices,tab,id) {
   var g = new Graph(nbVertices,tab);
   var table = document.getElementById('adj_m_table');
   table.innerHTML = " ";
-  var parent = document.getElementById('adj_m');
+  var parent = document.getElementById(id);
   if (document.getElementById('info_m')!=null) {
     parent.removeChild(document.getElementById('info_m'));
   }
@@ -232,7 +232,6 @@ function initAdjMatrix(nbVertices,tab) {
   for (var i = 0; i < g.vertices.length; i++ ) {
     th = document.createElement('th');
     th.innerHTML = g.vertices[i];
-    console.log(g.vertices[i]);
     tr.appendChild(th);
     head.appendChild(tr);
     table.appendChild(head);
@@ -260,6 +259,7 @@ function initAdjMatrix(nbVertices,tab) {
   table.appendChild(body);
 }
 
+/** Gets the maximum length of a list of vertices
 function getMaxLength(g) {
   var max = 0;
   for (var i = 0; i < g.vertices.length; i++) {
@@ -273,15 +273,16 @@ function getMaxLength(g) {
 
 /**
 * Initialize the Adjacent-List on the HTML
-* @class initAdjMatrix
+* @class initAdjList
 * @param {nbVertices} some integer
 * @param {tab} some Array of Edges
+* @param {id} some string : the name of the div where the <table> is positioned
 */
-function initAdjList(nbVertices,tab) {
+function initAdjList(nbVertices,tab,id) {
   var g = new Graph(nbVertices,tab);
   var table = document.getElementById('adj_l_table');
   table.innerHTML = " ";
-  var parent = document.getElementById('adj_l');
+  var parent = document.getElementById(id);
   if (document.getElementById('info_l')!=null) {
     parent.removeChild(document.getElementById('info_l'));
   }
@@ -293,7 +294,6 @@ function initAdjList(nbVertices,tab) {
   for (var i = 0; i < g.vertices.length; i++ ) {
     th = document.createElement('th');
     th.innerHTML = g.vertices[i];
-    console.log(g.vertices[i]);
     tr.appendChild(th);
     head.appendChild(tr);
     table.appendChild(head);
@@ -319,7 +319,9 @@ function initAdjList(nbVertices,tab) {
   table.appendChild(body);
 }
 
-
+/** Updates the graph with the entry of the user
+  * @function changeData
+*/
 function changeData() {
   var data = document.getElementById("data").value;
   var nbVertices = document.getElementById("vertices").value;
@@ -338,19 +340,27 @@ function changeData() {
     tab.push(new Edge(str[0],str[1]));
   }
   $("#svg_graph").empty();
-  initGraph(nbVertices,tab);
-  initAdjMatrix(nbVertices,tab);
-  initAdjList(nbVertices,tab);
+  initGraph(nbVertices,tab,"svg_graph");
+  initAdjMatrix(nbVertices,tab,"adj_m");
+  initAdjList(nbVertices,tab,"adj_l");
   document.getElementById('success').style.visibility = "visible";
   document.getElementById('success').setAttribute("class","alert alert-success");
   document.getElementById('success').innerHTML= "<strong>Success !</strong> Graph correctly initialized.";
 
 }
 
+/** deliver a random integer number between min and max (both included)
+  * @function random_min_max
+  * @param {min} some integer : minimum
+  * @param {max} some integer : maximum
+*/
 function random_min_max(min,max) {
   return Math.floor(Math.random() * max) + min;
 }
 
+/** Same as changeData but apply from random entry
+  * @function changeDataRdm
+*/
 function changeDataRdm() {
   var nbVertices = parseInt(document.getElementById("vertices_rdm").value);
   var nbEdges = parseInt(document.getElementById("edges_rdm").value);
@@ -359,14 +369,11 @@ function changeDataRdm() {
   for (var i = 0; i < nbVertices; i++) {
     do {
       x2=random_min_max(0,nbVertices);
-      console.log(x2);
-      console.log('---');
       var edg = new Edge(i,x2);
     } while (i==x2);
     tab.push(edg);
     if (tab_x.includes(x2)==false) {
       tab_x.push(x2);
-      console.log(tab_x);
     }
   }
   for (var i = nbVertices; i < nbEdges; i++) {
@@ -377,18 +384,11 @@ function changeDataRdm() {
     tab.push(new Edge(x1,x2));
   }
   $("#svg_graph").empty();
-  initGraph(nbVertices,tab);
-  initAdjMatrix(nbVertices,tab);
-  initAdjList(nbVertices,tab);
+  initGraph(nbVertices,tab,"svg_graph");
+  initAdjMatrix(nbVertices,tab,"adj_m");
+  initAdjList(nbVertices,tab,"adj_l");
   document.getElementById('success').style.visibility = "visible";
   document.getElementById('success').setAttribute("class","alert alert-success");
   document.getElementById('success').innerHTML= "<strong>Success !</strong> Graph correctly initialized.";
 
-}
-
-
-tab = [0,1,2,3,4,5];
-x=0;
-while (tab.includes(x)==true) {
-  x=random_min_max(0,7);
 }
