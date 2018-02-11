@@ -82,7 +82,7 @@
 
   </div>
 <script>
-    document.getElementById("svg_graph").setAttribute("width",6*$(document).width()/20);
+    document.getElementById("svg_graph").setAttribute("width",35*$(document).width()/100);
     document.getElementById("svg_graph").setAttribute("height",4*$(document).height()/10);
     $(document).ready(function() {
       document.getElementById("fst_li").setAttribute("class","active");
