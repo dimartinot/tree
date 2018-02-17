@@ -1,3 +1,5 @@
+A live demo of this project is available here : <http://dimartinot.ddns.net/tree>
+
 # Graphs
 
 I have based this project on the "Lecture slides" from [Robert Sedgewick] and [Kevin Wayne]. You can find them at the following [link](https://algs4.cs.princeton.edu/lectures/). I want to draw your attention on some specific lectures that were very helpful in the realisation of this part of my website :   
@@ -113,3 +115,12 @@ I hope the solution I implemented pleased you and until next, time I will leave 
 > does and you get the
 > pleasure of thinking about 
 > how to tell them
+
+
+   [robert sedgewick]: <https://en.wikipedia.org/wiki/Robert_Sedgewick_(computer_scientist)>
+   [kevin wayne]: <https://www.cs.princeton.edu/people/profile/wayne>
+   [Object Oriented JavaScript]: <https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object-oriented_JS>
+   [Bootstrap]: <https://getbootstrap.com/>
+   [d3.js]: <https://d3js.org/>
+   [dill]: <https://github.com/dimartinot/tree>
+   [Emily Oster]: <https://www.brown.edu/research/projects/oster/>
