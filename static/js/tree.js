@@ -260,6 +260,9 @@ function initAdjMatrix(nbVertices,tab,id) {
 }
 
 /** Gets the maximum length of a list of vertices
+* @class getMaxLength
+* @param {g} some Graph object
+*/
 function getMaxLength(g) {
   var max = 0;
   for (var i = 0; i < g.vertices.length; i++) {
