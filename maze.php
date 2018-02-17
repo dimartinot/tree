@@ -29,8 +29,11 @@ include './modules/header.php';
         <div id="success" class="alert alert-success" style="visibility:hidden">
         </div>
         <div class="form-group">
-          <label for="maze_size">Size of the maze :</label>
+          <label for="maze_size">Size of the maze (max 143) :</label>
           <input class="form-control" id="maze_size" value="10">
+
+          <label for="solve_speed">Solving speed (in ms) :</label>
+          <input class="form-control" id="solve_speed" value="200">
         </div>
         <button class="btn btn-default" onclick="load_maze()">Submit !</button>
       </div>
@@ -84,7 +87,7 @@ include './modules/header.php';
       var maze = new Maze(10);
       document.getElementById("fst_li").className="active";
       draw_maze(maze,"svg_maze");
-      solve(maze,"svg_maze");
+      solve(maze,"svg_maze",200);
     })
 </script>
 </body>
