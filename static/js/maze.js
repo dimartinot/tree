@@ -1,3 +1,5 @@
+//Timer variable, used in solving the maze
+var timer1,timer2,timer3,timer4;
 
 /**
 * Return the index of a given Barrier in an array of Barrier. Return -1 if not found
@@ -342,12 +344,16 @@ function draw_maze_graph(maze,current,marked,edge_tab) {
   * @function load_maze
 */
 function load_maze() {
-  var size=parseInt(document.getElementById('maze_size').value);
-  if (!isNaN(size)) {
+  clearTimeout(timer1);
+  clearTimeout(timer2);
+  clearTimeout(timer3);
+  clearTimeout(timer4);  var size=parseInt(document.getElementById('maze_size').value);
+  var speed=parseInt(document.getElementById('solve_speed').value);
+  if (!isNaN(size) && !isNaN(speed) && size<=143) {
     $("#svg_maze").empty();
     var maze = new Maze(Math.floor(Math.abs(size)));
     draw_maze(maze,"svg_maze");
-    solve(maze,"svg_maze");
+    solve(maze,"svg_maze",speed);
 
     if (maze.size<=50) {
       $("#maze_graph").empty();
@@ -381,16 +387,18 @@ function load_maze() {
   * @param {maze} some Maze object
   * @param {current} some integer : position of the red dot
   * @param {svg} some DOM element : the svg where to insert the dot
+  * @param {color} some STRING element : describes the color of the dot
 */
-function draw_dot(maze,current,svg) {
+function draw_dot(maze,current,svg,color) {
   var circle = document.createElementNS("http://www.w3.org/2000/svg","circle");
   size=maze.size;
   width=svg.attr("width");
   height=svg.attr("height");
+  var r=(4-2)/(10-100);
   circle.setAttributeNS(null,"cx",((current % size)/(size-1))*width+width/(2*size-2));
   circle.setAttributeNS(null,"cy",(Math.floor(current / size)/(size-1))*height+height/(2*size-2));
-  circle.setAttributeNS(null,"r",4);
-  circle.setAttributeNS(null,"fill","red");
+  circle.setAttributeNS(null,"r",r*size+4);
+  circle.setAttributeNS(null,"fill",color);
   document.getElementById("svg_maze").appendChild(circle);
 }
 
@@ -402,35 +410,48 @@ function draw_dot(maze,current,svg) {
   * @param {marked} some array of boolean : describes all cells that have been visited
   * @param {svg} some DOM object : used to draw dots at the end of the algorithm
 */
-function move(maze,current,objective,marked,svg) {
+function move(maze,current,objective,marked,svg,speed) {
   marked[current]=true;
   size=maze.size;
   size=size-1;
   if (current==objective) {
-    draw_dot(maze,current,svg);
+    draw_dot(maze,current,svg,"blue");
+    clearTimeout(timer1);
+    clearTimeout(timer2);
+    clearTimeout(timer3);
+    clearTimeout(timer4);
     return true;
   }
+  draw_dot(maze,current,svg,"red");
   for (var i = 1; i<=4; i++) {
     switch (i) {
       case 1://top
         if (get_index(maze.tab,new Barrier(current,current+1))==-1 && marked[current-size]==false) {
-          setTimeout(move(maze,current-size,objective,marked,svg),200);
-        }
+          timer1 = setTimeout(function () {
+            move(maze,current-size,objective,marked,svg,speed);
+        },speed);
+      }
         break;
       case 2://left
         if (get_index(maze.tab,new Barrier(current,current+size))==-1  && marked[current-1]==false) {
-          setTimeout(move(maze,current-1,objective,marked,svg),200);
-        }
+          timer2 = setTimeout(function () {
+            move(maze,current-1,objective,marked,svg,speed);
+        },speed);
+      }
         break;
       case 3://bottom
         if (get_index(maze.tab,new Barrier(current+size,current+size+1))==-1  && marked[current+size]==false) {
-          setTimeout(move(maze,current+size,objective,marked,svg),200);
-        }
+          timer3 = setTimeout(function () {
+            move(maze,current+size,objective,marked,svg,speed);
+        },speed);
+      }
         break;
     case 4://right
       if (get_index(maze.tab,new Barrier(current+1,current+1+size))==-1  && marked[current+1]==false) {
-        setTimeout(move(maze,current+1,objective,marked,svg),200);
-      }
+        timer4 = setTimeout(function () {
+          move(maze,current+1,objective,marked,svg,speed);
+      },speed);
+    }
       break;
     }
   }
@@ -439,9 +460,10 @@ function move(maze,current,objective,marked,svg) {
 /** Executes the move algorithm onto the maze
   * @function solve
   * @param {maze} some Maze object
-  * @param {id} some id :  the id of the svg to draw the dots
+  * @param {id} some int :  the id of the svg to draw the dots
+  * @param {speed} some int : specify the speed of solving the maze
 */
-function solve(maze,id) {
+function solve(maze,id,speed) {
   var cell = 0;
   var objectif = (maze.size-1)*(maze.size-1)+(maze.size-3);
   var marked = [];
@@ -451,5 +473,5 @@ function solve(maze,id) {
   var svg = d3.select("#"+id),
       width = +svg.attr("width"),
       height = +svg.attr("height");
-  move(maze,cell,objectif,marked,svg);
+  move(maze,cell,objectif,marked,svg,speed);
 }
