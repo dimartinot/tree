@@ -105,7 +105,7 @@ One way to represent the maze as a graph is to consider as a vertex every point 
 * The adjacency-list and adjacency-list are only drawn for maze of size equal or lower than 5
 
 # See you !
-I hope the solution I implemented pleased you and until next, time I will leave you with this quote from the [Emily Oster], a famous american economist: 
+I hope the solution I implemented pleased you and until next time, I will leave you with this quote from the [Emily Oster], a famous american economist: 
 > The greatest moments are
 > those when you see the
 > result pop up in a graph or in
