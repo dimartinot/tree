@@ -1,5 +1,6 @@
 //Timer variable, used in solving the maze
 var timer1,timer2,timer3,timer4;
+var stop=false;
 
 /**
 * Return the index of a given Barrier in an array of Barrier. Return -1 if not found
@@ -347,12 +348,14 @@ function load_maze() {
   clearTimeout(timer1);
   clearTimeout(timer2);
   clearTimeout(timer3);
-  clearTimeout(timer4);  var size=parseInt(document.getElementById('maze_size').value);
+  clearTimeout(timer4);
+  var size=parseInt(document.getElementById('maze_size').value);
   var speed=parseInt(document.getElementById('solve_speed').value);
   if (!isNaN(size) && !isNaN(speed) && size<=143) {
     $("#svg_maze").empty();
     var maze = new Maze(Math.floor(Math.abs(size)));
     draw_maze(maze,"svg_maze");
+    stop = false;
     solve(maze,"svg_maze",speed);
 
     if (maze.size<=50) {
@@ -420,6 +423,10 @@ function move(maze,current,objective,marked,svg,speed) {
     clearTimeout(timer2);
     clearTimeout(timer3);
     clearTimeout(timer4);
+    stop = true;
+    return true;
+  }
+  if (stop) {//if we have reached the end of the maze, there's no point on running throught it anymore. This condition stops it
     return true;
   }
   draw_dot(maze,current,svg,"red");
