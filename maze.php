@@ -81,8 +81,8 @@ include './modules/header.php';
 <script>
     document.getElementById("svg_maze").setAttribute("width",30*$(document).width()/100);
     document.getElementById("svg_maze").setAttribute("height",30*$(document).width()/100);
-    document.getElementById("maze_graph").setAttribute("width",80*$(document).width()/100);
-    document.getElementById("maze_graph").setAttribute("height",7*$(document).height()/10);
+    document.getElementById("maze_graph").setAttribute("width",$("#maze_graph_container").width());
+    document.getElementById("maze_graph").setAttribute("height",$("#maze_graph_container").height());
     $(document).ready(function() {
       var maze = new Maze(10);
       document.getElementById("fst_li").className="active";
