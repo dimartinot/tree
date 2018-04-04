@@ -1,4 +1,4 @@
-A live demo of this project is available here : <http://www.dimartinot.com>
+A live demo of this project is available here : <http://www.dimartinot.com/tree/>
 
 # Graphs
 
