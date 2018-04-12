@@ -28,7 +28,7 @@ function Edge(start,end) {
 function Graph(nbVertices,tab) {
   var count = 0;
   /*
-    We, firstly, verify if what we are try to initialize as a Graph is an Object
+    We, firstly, verify if what we are trying to initialize as a Graph is an Object
   */
   this.vertices = [];//list of all vertices
   if (typeof this != "object") {
@@ -70,7 +70,7 @@ function Graph(nbVertices,tab) {
   }
 
   /*
-    If some vertices do not have any edges (equivalent to "the amount of edges is lower than the amount of vertices"), the entry is considered to be incorrect
+    If some vertices do not have any edges (equivalent to "the amount of edges is lower than the amount of vertices"), the entry is considered as incorrect
   */
   if (count!=nbVertices) {
     document.getElementById('success').style.visibility = "visible";
@@ -86,7 +86,7 @@ function Graph(nbVertices,tab) {
     json["links"] = [];
     for (var element=0;element<this.vertices.length;element++) {
       /*
-        initialize every vertices
+        initialize all the vertices
       */
       json["nodes"].push(
         {
